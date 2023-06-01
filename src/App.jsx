@@ -12,20 +12,23 @@ function App() {
     id: uuidv4(),
     name: ''
   })
+  console.log(taskList)
 
   const haddleAddTask = () => {
       setValueTask({ id: uuidv4(), name: '' })
       dispatch(addTask(valueTask))
-    
   }
 
   const handdleUpdateTask = ()=>{
-    setValueTask({ id: '', name: '' })
     dispatch(updateTask(valueTask))
     setUpdateId(null)
+    setValueTask({ id: uuidv4(), name: '' })
+    console.log(taskList)
+
   }
 
   const handdleEdit = (id, name) => {
+    console.log(id, name)
     setValueTask({ id, name })
     setUpdateId(id)
   }
@@ -38,7 +41,10 @@ function App() {
 
   const renderCardTask = () => taskList.map(task => (
     <div key={task.id} className="flex justify-between p-4 bg-slate-800  rounded">
-      <h1 className="text-gray-300">{task.name} </h1>
+      <div>
+      <h1 className="text-gray-300 text-left text-lg">{task.name} </h1>
+      <p className="text-gray-500 text-left text-xs">{task.id}</p>
+      </div>
       <div className="flex gap-3">
         <button
           onClick={() => handdleEdit(task.id, task.name)}

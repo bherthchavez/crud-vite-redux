@@ -1,15 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = [
-    {
-        id: '1',
-        name: 'Clean Toilet'
-    },
-    {
-        id: '2',
-        name: 'Clean Kitchen'
-    }
-]
+const initialState = []
 
 export const taskSlice = createSlice({
     name: 'task',
