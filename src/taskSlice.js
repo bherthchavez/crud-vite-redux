@@ -18,7 +18,7 @@ export const taskSlice = createSlice({
         addTask: (state, action) => {
             state.push(action.payload)
         },
-        editTask: (state, action) => {
+        updateTask: (state, action) => {
             const { id, name } = action.payload
             const existingTask = state.find(task=> task.id === id)
             if(existingTask){
@@ -36,6 +36,6 @@ export const taskSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { addTask, editTask, deleteTask } = taskSlice.actions
+export const { addTask, updateTask, deleteTask } = taskSlice.actions
 
 export default taskSlice.reducer

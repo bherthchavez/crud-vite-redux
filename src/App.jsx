@@ -1,50 +1,52 @@
 import { useState } from "react"
-import { useSelector, useDispatch } from 'react-redux'
-import { addTask, deleteTask, editTask } from "./taskSlice"
+import { useDispatch, useSelector } from "react-redux"
+import { v4 as uuidv4 } from 'uuid';
+import { addTask, deleteTask, updateTask } from "./taskSlice";
 
 function App() {
-
   const taskList = useSelector((state) => state.task)
   const dispatch = useDispatch()
 
-  const [btnEdit, setBtnEditAdd] = useState(false)
-  const [task, setTask] = useState({
-    id: '',
+  const [updateId, setUpdateId] = useState(null)
+  const [valueTask, setValueTask] = useState({
+    id: uuidv4(),
     name: ''
   })
 
-  const hanndleAddTask = () => {
-
-    if (btnEdit) {
-      setTask({ id: '', name: '' })
-      dispatch(editTask(task))
-      setBtnEditAdd(!btnEdit)
-    } else {
-      setTask({ id: '', name: '' })
-      dispatch(addTask(task))
-    }
+  const haddleAddTask = () => {
+      setValueTask({ id: uuidv4(), name: '' })
+      dispatch(addTask(valueTask))
+    
   }
 
-  const hanndleEditTask = (id, name) => {
-    setBtnEditAdd(true)
-    setTask({ ...task, id, name })
+  const handdleUpdateTask = ()=>{
+    setValueTask({ id: '', name: '' })
+    dispatch(updateTask(valueTask))
+    setUpdateId(null)
   }
 
-  const taskCard = () => taskList.map(task => (
-    <div key={task.id} className="flex justify-between bg-slate-900 p-5 rounded">
-      <h1 className="text-gray-300 text-2xl font-semibold">{task.name}</h1>
-      <div className=" flex gap-4">
-        <button
-          onClick={() => hanndleEditTask(task.id, task.name)}
-          className="text-gray-500 hover:text-slate-50">
-          Edit
-        </button>
+  const handdleEdit = (id, name) => {
+    setValueTask({ id, name })
+    setUpdateId(id)
+  }
 
+  const hanndleDeleteTask = (id)=>{
+    dispatch(deleteTask({ id }))
+    setValueTask({ id: '', name: '' })
+    setUpdateId(null)
+  }
+
+  const renderCardTask = () => taskList.map(task => (
+    <div key={task.id} className="flex justify-between p-4 bg-slate-800  rounded">
+      <h1 className="text-gray-300">{task.name} </h1>
+      <div className="flex gap-3">
         <button
-          onClick={() => dispatch(deleteTask({ id: task.id }))}
-          className="text-gray-500 hover:text-slate-50">
-          Delete
-        </button>
+          onClick={() => handdleEdit(task.id, task.name)}
+          className="text-gray-400 hover:text-gray-100 ">
+          Edit</button>
+        <button
+          onClick={() => hanndleDeleteTask(task.id)}
+          className="text-gray-400 hover:text-gray-100 ">Delete</button>
       </div>
     </div>
   ))
@@ -53,28 +55,24 @@ function App() {
 
   return (
     <>
-      <div className="h-screen bg-slate-950 grid place-items-center">
-        <div className="grid gap-5 text-center">
-          <h1 className="text-2xl font-semibold text-gray-300">
-            Simple CRUD with Redux and Vite
-          </h1>
-
-          <div className="flex gap-2 items-center mx-auto">
+      <div className="h-screen bg-slate-950">
+        <div className="grid justify-center gap-4 pt-20 text-center">
+          <div className="flex gap-2">
             <input
-              onChange={(e) => setTask({ ...task, name: e.target.value })}
-              value={task.name}
-              type="text"
-              className="px-3 py-2 rounded font-medium text-lg"
+              type='text'
+              onChange={(e) => setValueTask({ ...valueTask, name: e.target.value })}
+              value={valueTask.name}
+              className="py-2 px-3 font-medium rounded  focus:outline-none"
             />
             <button
-              onClick={hanndleAddTask}
-              className="bg-slate-700 text-gray-300 px-5 py-3 rounded"
+              onClick={updateId ? handdleUpdateTask  : haddleAddTask}
+              className="bg-slate-700 w-32 text-gray-300  py-1 rounded hover:bg-slate-800"
             >
-              {btnEdit ? 'Update Task' : 'Add Task'} </button>
+              {updateId ? 'Update Task' : ' Add Task'}
+            </button>
           </div>
 
-          {taskList.length ? taskCard() : <p className="text-gray-300">No Task</p>}
-
+          {taskList.length ? renderCardTask() : <p className="text-gray-300 pt-5"> No Task </p>}
         </div>
       </div>
     </>
