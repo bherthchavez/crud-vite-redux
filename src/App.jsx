@@ -12,7 +12,6 @@ function App() {
     id: uuidv4(),
     name: ''
   })
-  console.log(taskList)
 
   const haddleAddTask = () => {
       setValueTask({ id: uuidv4(), name: '' })
@@ -23,12 +22,9 @@ function App() {
     dispatch(updateTask(valueTask))
     setUpdateId(null)
     setValueTask({ id: uuidv4(), name: '' })
-    console.log(taskList)
-
   }
 
   const handdleEdit = (id, name) => {
-    console.log(id, name)
     setValueTask({ id, name })
     setUpdateId(id)
   }
