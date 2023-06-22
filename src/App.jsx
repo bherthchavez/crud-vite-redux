@@ -1,27 +1,31 @@
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { v4 as uuidv4 } from 'uuid';
 import { addTask, deleteTask, updateTask } from "./taskSlice";
 
 function App() {
   const taskList = useSelector((state) => state.task)
   const dispatch = useDispatch()
 
+
+  const generateID = ()=>{
+    return Math.floor(Math.random() * 10000000000)
+  }
+
   const [updateId, setUpdateId] = useState(null)
   const [valueTask, setValueTask] = useState({
-    id: uuidv4(),
+    id: generateID(),
     name: ''
   })
 
   const haddleAddTask = () => {
     dispatch(addTask(valueTask))
-    setValueTask({ id: uuidv4(), name: '' })
+    setValueTask({ id: generateID(), name: '' })
   }
 
   const handdleUpdateTask = () => {
     dispatch(updateTask(valueTask))
     setUpdateId(null)
-    setValueTask({ id: uuidv4(), name: '' })
+    setValueTask({ id: generateID(), name: '' })
   }
 
   const handdleEdit = (id, name) => {
@@ -31,12 +35,12 @@ function App() {
 
   const hanndleDeleteTask = (id) => {
     dispatch(deleteTask({ id }))
-    setValueTask({ id: uuidv4(), name: '' })
+    setValueTask({ id: generateID(), name: '' })
     setUpdateId(null)
   }
 
   const renderCardTask = () => taskList.map(task => (
-    <div key={task.id} className="flex justify-between p-4 bg-slate-800  rounded">
+    <div key={task.id} className="rounded flex justify-between p-4 bg-slate-800">
       <div className="text-left">
         <h1 className="text-gray-300  text-lg">{task.name} </h1>
         <p className="text-gray-500  text-xs">{task.id}</p>
@@ -53,8 +57,6 @@ function App() {
     </div>
   ))
 
-
-
   return (
     <>
       <div className="h-screen bg-slate-950">
@@ -70,7 +72,7 @@ function App() {
               onClick={updateId ? handdleUpdateTask : haddleAddTask}
               className="bg-slate-700 w-32 text-gray-300  py-1 rounded hover:bg-slate-800"
             >
-              {updateId ? 'Update Task' : ' Add Task'}
+              {updateId ? 'Update Task' : 'Add Task'}
             </button>
           </div>
           <div className="grid gap-5 max-h-96 overflow-auto p-3">
